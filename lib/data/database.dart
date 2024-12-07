@@ -114,23 +114,21 @@ class AppDatabase {
     final db = await database();
     await createDiaryTable(db);
 
-    String sql = "SELECT * FROM diary;"; 
-
-    String sql2 = """
+    String sql = """
       SELECT diary.id as id, name, diary.datecreated as datecreated, diaryentry.id as entryid,
         entry, diaryentry.datecreated as entrydate FROM diary
         LEFT JOIN diaryentry ON diaryentry.diaryid = diary.id;
     """;
 
-    List<Map<String, dynamic>> data2 = await db.rawQuery(sql2);
+    List<Map<String, dynamic>> data = await db.rawQuery(sql);
 
-    print('SQL DATA $data2');
+    print('SQL DATA $data');
 
     final List<Diary> uniqueDiaries = []; // Set to ensure uniqueness
     final List<String> diaryIds = []; // For tracking
 
     //Build unique diaries
-    for (final diary in data2) {
+    for (final diary in data) {
       if(!diaryIds.contains(diary['id'])) {
         diaryIds.add(diary['id']);
         Diary diaryObj = Diary(
@@ -139,7 +137,7 @@ class AppDatabase {
           dateCreated: DateTime.parse(diary['datecreated']),
         );
 
-        List<Map<String,dynamic>> diaryEntries = data2.where( (entry) => diaryObj.id == entry['id']).toList();
+        List<Map<String,dynamic>> diaryEntries = data.where( (entry) => diaryObj.id == entry['id']).toList();
         for(Map<String,dynamic> diaryEntry in diaryEntries) {
           if(diaryEntry['entryid'] != null) {
             diaryObj.entries.add(
@@ -155,39 +153,6 @@ class AppDatabase {
       }
     }
 
-    //Build the diary entries
-    // for (Diary diary in uniqueDiaries) {
-    //   List<Map<String,dynamic>> diaryEntries = data2.where( (entry) => diary.id == entry['id']).toList();
-    //   for(Map<String,dynamic> diaryEntry in diaryEntries) {
-    //     if(diaryEntry['entryid'] != null) {
-    //       diary.entries.add(
-    //         DiaryEntry(
-    //           id: diaryEntry['entryid'], 
-    //           entry: diaryEntry['entry'], 
-    //           dateCreated: DateTime.parse(diaryEntry['entrydate'])
-    //         )
-    //       );
-    //     }
-    //   }
-    // }
-
-    //print('UNIQUE DIARIES ${uniqueDiaries[0].entries}');
-
-    List<Map<String, dynamic>> data = await db.rawQuery(sql);
-
-    List<Diary> diaryList = [];
-
-    for (var el in data) {
-      diaryList.add(
-        Diary(
-          id: el['id'], 
-          name: el['name'], 
-          dateCreated: DateTime.parse(el['datecreated']),
-        )
-      );
-    }
-
-    print("UNIQUE DIARIES $uniqueDiaries");
     return uniqueDiaries; 
   }
 
