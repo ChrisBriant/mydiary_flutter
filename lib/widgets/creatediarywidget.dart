@@ -12,11 +12,14 @@ class CreateDiaryWidget extends StatefulWidget {
 class _CreateDiaryWidgetState extends State<CreateDiaryWidget> {
   TextEditingController textController = TextEditingController();
 
-  addDiary() async {
+  addDiary(BuildContext ctx) async {
     AppDatabase db = AppDatabase();
 
     try{
-      await db.addDiary(diaryName: textController.text);
+      await db.addDiary(diaryName: textController.text,);
+      if(ctx.mounted) {
+        Navigator.of(ctx).pop();
+      }
     } catch(err) {
       print('DATABASE ERROR $err');
     }
@@ -26,14 +29,12 @@ class _CreateDiaryWidgetState extends State<CreateDiaryWidget> {
   @override
   Widget build(BuildContext context) {
     return ContainerDialog(
-      confirmAction: () => addDiary(),
-      content:Container(
-        child: TextField(
-          controller: textController,
-        ),
+      confirmAction: () => addDiary(context),
+      content:TextField(
+        controller: textController,
       ),
       confirmName: "Add",
-      title: const Text('Add Diary'),
+      title: const Text('Add Diary', textAlign: TextAlign.center,),
     );
   }
 }

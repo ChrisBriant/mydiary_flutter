@@ -171,7 +171,7 @@ class AppDatabase {
     //   }
     // }
 
-    print('UNIQUE DIARIES ${uniqueDiaries[0].entries}');
+    //print('UNIQUE DIARIES ${uniqueDiaries[0].entries}');
 
     List<Map<String, dynamic>> data = await db.rawQuery(sql);
 
@@ -186,6 +186,8 @@ class AppDatabase {
         )
       );
     }
+
+    print("UNIQUE DIARIES $uniqueDiaries");
     return uniqueDiaries; 
   }
 
@@ -230,12 +232,21 @@ class DiaryEntry {
   final String id;
   final String entry;
   final DateTime dateCreated;
+  DateTime? dateUpdated;
 
   DiaryEntry ({
     required this.id,
     required this.entry,
-    required this.dateCreated
+    required this.dateCreated,
+    this.dateUpdated
   });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'entry': entry,
+    'dateCreated': dateCreated.toIso8601String(),
+    'dateUpdated' : dateUpdated?.toIso8601String()
+  };
 
 }
 
@@ -251,4 +262,11 @@ class Diary {
     required this.dateCreated,
     entries
   });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'dateCreated': dateCreated.toIso8601String(),
+    'entries': entries.map((entry) => entry.toJson()).toList(),
+  };
 }

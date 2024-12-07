@@ -3,6 +3,9 @@ import '../data/database.dart';
 import '../widgets/adddiaryentrywidget.dart';
 import '../widgets/viewdiaryentrywidget.dart';
 import '../helpers/helpers.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class DiaryScreen extends StatefulWidget {
   static const String routeName = "/diaryscreen";
@@ -63,6 +66,38 @@ class _DiaryScreenState extends State<DiaryScreen> {
       );
     }
 
+    Future<void> downloadJsonToFile(String jsonData) async {
+    
+      final Directory? directory = await getDownloadsDirectory();
+      if(directory != null) {
+        try {
+          final file = File('${directory.path}/diary_data.json');
+          await file.writeAsString(jsonData);
+          print('I SHOULD DOWNLOAD ${directory.path}/diary_data.json');
+        } catch(err) {
+          print("An error occured $err");
+        }
+
+      } else {
+        throw Exception('Download is not possible');
+      }
+
+
+      //
+    }
+
+    void exportDiary() async {
+      String jsonData = jsonEncode(diary!.toJson());
+
+      print("Json Output $jsonData");
+      try {
+        await downloadJsonToFile(jsonData);
+      } catch(err) {
+        print('AN ERROR OCCURRED, $err');
+      }
+      
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -70,9 +105,17 @@ class _DiaryScreenState extends State<DiaryScreen> {
       body: Column(
         children: [
           const Text(""),
-          ElevatedButton(
-            onPressed: () => showAddDiaryDialog(), 
-            child: const Text('Add Entry')
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () => showAddDiaryDialog(), 
+                child: const Text('Add Entry')
+              ),
+              ElevatedButton(
+                onPressed: () => exportDiary(), 
+                child: const Text("Export Diary")
+              )
+            ],
           ),
           SizedBox(
             height: 300,
