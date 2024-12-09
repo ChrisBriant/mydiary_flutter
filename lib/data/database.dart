@@ -84,7 +84,7 @@ class AppDatabase {
     final db = await database();
     await createDiaryEntry(db);
 
-    DateTime currentDt = DateTime.now();
+    DateTime currentDt = DateTime.now(); //.subtract(const Duration(days: 1));
     String id = const Uuid().v4();
 
     int rows = await db.insert(
@@ -119,6 +119,22 @@ class AppDatabase {
         entry, diaryentry.datecreated as entrydate FROM diary
         LEFT JOIN diaryentry ON diaryentry.diaryid = diary.id;
     """;
+
+    //This is to get the diaryentries by a specifc date (it doesn't work)
+
+    // String sql = """
+    // SELECT diary.id as id, name, diary.datecreated as datecreated, 
+    // diaryentry.id as entryid, entry, diaryentry.datecreated as entrydate 
+    // FROM diary
+    // LEFT JOIN diaryentry ON diaryentry.diaryid = diary.id
+    // WHERE strftime('%Y-%m-%d', diaryentry.datecreated) = ?;
+    // """;
+
+    // String date = "2024-12-08"; // Example date in YYYY-MM-DD format
+
+    // // Execute the query with the date parameter
+    // List<Map<String, dynamic>> data = await db.rawQuery(sql, [date]);
+
 
     List<Map<String, dynamic>> data = await db.rawQuery(sql);
 
@@ -155,6 +171,7 @@ class AppDatabase {
 
     return uniqueDiaries; 
   }
+
 
   Future<DiaryEntry> updateDiaryEntry(String entryId, String updatedEntry) async {
     final db = await database();

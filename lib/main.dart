@@ -27,9 +27,27 @@ class MyDiary extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const Home(),
+      onGenerateRoute: (settings)  {
+            if (settings.name == DiaryScreen.routeName) {
+              // Cast the arguments to the correct
+              // type: ScreenArguments.
+              final args = settings.arguments as Map<String,dynamic>;
+
+              print("ON GENERATE ROUTE $args");
+
+              // Then, extract the required data from
+              // the arguments and pass the data to the
+              // correct screen.
+              return MaterialPageRoute(
+                builder: (context) {
+                  return DiaryScreen(diary: args['diary'],);
+                },
+              );
+            }
+      },
       routes: {
         Home.routeName : (context) =>  const Home(),
-        DiaryScreen.routeName : (context) => const DiaryScreen()
+        //DiaryScreen.routeName : (context) => const DiaryScreen()
       }
     );
   }

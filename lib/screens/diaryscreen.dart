@@ -10,7 +10,10 @@ import 'package:path_provider/path_provider.dart';
 class DiaryScreen extends StatefulWidget {
   static const String routeName = "/diaryscreen";
 
+  final Diary diary;
+
   const DiaryScreen({
+    required this.diary,
     super.key
   });
 
@@ -19,28 +22,47 @@ class DiaryScreen extends StatefulWidget {
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
+    List<DiaryEntry> diaryEntries = [];
     String title = "Diary";
-    Diary? diary;
+    DateTime selectedDate =  DateTime.now();
+    //Diary diary = widget.diary;
 
-    if(args != null) {
-      title = args['diary'].name;
-      diary = args['diary'];
+    List<DiaryEntry> getDiaryEntriesByDate(DateTime? searchDate) {
+      List<DiaryEntry> newDiaryEntries = widget.diary.entries;
+
+      DateTime sd = searchDate ?? DateTime.now();
+
+      newDiaryEntries = newDiaryEntries.where((DiaryEntry de) => (de.dateCreated.day == sd.day) && (de.dateCreated.month == sd.month) && (de.dateCreated.year == sd.year)).toList();
+      print('NEW DIARY ENTRIES $newDiaryEntries');
+      return newDiaryEntries;
+    }
+    
+    @override
+    void initState() {
+      //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
+      print("DO I GET HERE");
+      diaryEntries = getDiaryEntriesByDate(DateTime.now());
+      super.initState();
     }
 
+  @override
+  Widget build(BuildContext context) {
+    //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
+
+
+
+
     void updateDiaryEntries(newEntry, adding) {
-      //DiaryEntry replaceEntry = diary!.entries.firstWhere((diaryEntry) => diaryEntry.id == newEntry.id);
-      int insertIdx = diary!.entries.indexWhere((DiaryEntry d) => d.id == newEntry.id);
-      diary.entries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
+      //DiaryEntry replaceEntry = widget.diary.entries.firstWhere((diaryEntry) => diaryEntry.id == newEntry.id);
+      int insertIdx = diaryEntries.indexWhere((DiaryEntry d) => d.id == newEntry.id);
+      diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
       print('I NEED TO INSERT AT $insertIdx');
 
       setState(() {
         if(adding) {
-          diary!.entries.insert(0,newEntry);
+          diaryEntries.insert(0,newEntry);
         } else {
-          diary!.entries.insert(insertIdx,newEntry);
+          diaryEntries.insert(insertIdx,newEntry);
         }
         
       });
@@ -50,7 +72,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AddDiaryEntryWidget(diaryId: diary!.id, updateEntries: updateDiaryEntries,);
+          return AddDiaryEntryWidget(diaryId: widget.diary.id, updateEntries: updateDiaryEntries,);
         },
       );
     }
@@ -61,7 +83,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return ViewDiaryEntryWidget(diaryId: diary!.id, diaryEntry: entry, updateEntries: updateDiaryEntries,);
+          return ViewDiaryEntryWidget(diaryId: widget.diary.id, diaryEntry: entry, updateEntries: updateDiaryEntries,);
         },
       );
     }
@@ -87,7 +109,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
     }
 
     void exportDiary() async {
-      String jsonData = jsonEncode(diary!.toJson());
+      String jsonData = jsonEncode(widget.diary.toJson());
 
       print("Json Output $jsonData");
       try {
@@ -97,6 +119,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
       }
       
     }
+
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -117,16 +142,32 @@ class _DiaryScreenState extends State<DiaryScreen> {
               )
             ],
           ),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  DateTime prevDate = selectedDate.subtract(const Duration(days: 1));
+
+                  List<DiaryEntry> newEntries = getDiaryEntriesByDate(prevDate);
+                  setState(() {
+                    diaryEntries = newEntries;
+                  });
+                  selectedDate = prevDate;
+                }, 
+                icon: Icon(Icons.arrow_back),
+              ),
+            ],
+          ),
           SizedBox(
             height: 300,
             child: ListView.builder(
-              itemCount: diary!.entries.length,
+              itemCount: diaryEntries.length,
               itemBuilder: (ctx, idx) => InkWell(
-                onLongPress: () => showViewDiaryEntryDialog(diary!.entries[idx]),
+                onLongPress: () => showViewDiaryEntryDialog(diaryEntries[idx]),
                 child: ListTile(
-                    key: ValueKey(diary!.entries[idx].id),
+                    key: ValueKey(diaryEntries[idx].id),
                     title: Text(
-                      diary.entries[idx].entry,
+                      diaryEntries[idx].entry,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1, // Limit to one line
                       style: const TextStyle(
@@ -136,7 +177,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                       ),
                     ),
                     subtitle: Text(
-                      Helpers.getDisplayDate(diary!.entries[idx].dateCreated),
+                      Helpers.getDisplayDate(diaryEntries[idx].dateCreated),
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.blue, 
