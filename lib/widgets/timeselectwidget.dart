@@ -35,14 +35,17 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget> {
         decoration:  BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
+        // border: Border.all(
+        //   color: Colors.black
+        // )
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.5),
+        //     spreadRadius: 5,
+        //     blurRadius: 7,
+        //     offset: const Offset(0, 3), // changes position of shadow
+        //   ),
+        // ],
       ),
       child: Row(
         children: [
@@ -64,12 +67,21 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget> {
                   widget.onUpdate(hour,minute);
                 },
                 child: Container(
-                  color: Colors.grey,
-                  child: const Icon(Icons.arrow_upward, size: 18,)
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(90),
+                  ),
+                  
+                  child: const Icon(Icons.arrow_upward, size: 18, color: Colors.white,)
                 ),
               ),
               Container(
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade300,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                padding: const EdgeInsets.all(2),
                 child: Text(
                   hour.toString().padLeft(2,'0'),
                   style: const TextStyle(
@@ -94,13 +106,16 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget> {
                   widget.onUpdate(hour,minute);
                 },
                 child: Container(
-                  color: Colors.grey,
-                  child: const Icon(Icons.arrow_downward, size: 18,)
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(90),
+                  ),
+                  child: const Icon(Icons.arrow_downward, size: 18,color: Colors.white,)
                 ),
               ),
             ],
           ),
-          const Text(":",
+          const Text(" : ",
               style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize : 20,
@@ -124,12 +139,20 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget> {
                   widget.onUpdate(hour,minute);
                 },
                 child: Container(
-                  color: Colors.grey,
-                  child: const Icon(Icons.arrow_upward, size: 18,)
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(90),
+                  ),
+                  child: const Icon(Icons.arrow_upward, size: 18,color: Colors.white,)
                 ),
               ),
               Container(
-                color: Colors.white,
+                 decoration: BoxDecoration(
+                  color: Colors.orange.shade300,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.all(2),
+                margin: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
                   minute.toString().padLeft(2,'0'),
                   style: const TextStyle(
@@ -154,8 +177,11 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget> {
                   widget.onUpdate(hour,minute);
                 },
                 child: Container(
-                  color: Colors.grey,
-                  child: const Icon(Icons.arrow_downward, size: 18,)
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(90),
+                  ),
+                  child: const Icon(Icons.arrow_downward, size: 18,color: Colors.white,)
                 ),
               ),
             ],
