@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import './containerdialog.dart';
 import '../data/database.dart';
+import '../helpers/helpers.dart';
 
 class AddDiaryEntryWidget extends StatefulWidget {
   final String diaryId;
   final Function updateEntries;
+  final DateTime? diaryEntryDateTime;
 
   const AddDiaryEntryWidget({
     required this.diaryId,
     required this.updateEntries,
+    this.diaryEntryDateTime,
     super.key
   });
 
@@ -45,7 +48,13 @@ class _AddDiaryEntryWidgetState extends State<AddDiaryEntryWidget> {
           child: Column(
           
             children:[
-              Text(DateTime.now().toString()), 
+              Text(
+                Helpers.getDateDisplaySimple(DateTime.now()),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize : 20,
+                ),
+              ), 
               const SizedBox(height: 10,),
               TextField(
                 controller: textController,
