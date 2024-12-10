@@ -79,12 +79,13 @@ class AppDatabase {
   Future<DiaryEntry> addDiaryEntry({
       required String diaryId,
       required String entry,
+      required DateTime diaryEntryDateTime,
     } 
   ) async {
     final db = await database();
     await createDiaryEntry(db);
 
-    DateTime currentDt = DateTime.now(); //.subtract(const Duration(days: 1));
+    //DateTime currentDt = DateTime.now(); //.subtract(const Duration(days: 1));
     String id = const Uuid().v4();
 
     int rows = await db.insert(
@@ -93,7 +94,7 @@ class AppDatabase {
         'id' : id,
         'diaryid' : diaryId,
         'entry' : entry,
-        'datecreated' : currentDt.toIso8601String()
+        'datecreated' : diaryEntryDateTime.toIso8601String()
       },
       conflictAlgorithm: sql.ConflictAlgorithm.rollback  
     );
@@ -102,7 +103,7 @@ class AppDatabase {
       return DiaryEntry(
         id: id, 
         entry: entry, 
-        dateCreated: currentDt
+        dateCreated: diaryEntryDateTime
       );
     } else {
       throw Exception("Unable to add diary entry");

@@ -94,4 +94,11 @@ class Helpers {
 
     return "$d/$m/$y $h:$min";
   }
+
+  static String getDateOnlyDisplaySimple(DateTime date) {
+    String d = date.day.toString().padLeft(2,'0');
+    String m = date.month.toString().padLeft(2,'0');
+    String y = date.year.toString();
+    return "$d/$m/$y";
+  }
 }

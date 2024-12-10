@@ -51,22 +51,22 @@ class _DiaryScreenState extends State<DiaryScreen> {
   Widget build(BuildContext context) {
     //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
 
-
-
-
     void updateDiaryEntries(newEntry, adding) {
       //DiaryEntry replaceEntry = widget.diary.entries.firstWhere((diaryEntry) => diaryEntry.id == newEntry.id);
-      int insertIdx = diaryEntries.indexWhere((DiaryEntry d) => d.id == newEntry.id);
+      //int insertIdx = diaryEntries.indexWhere((DiaryEntry d) => d.id == newEntry.id);
       diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
       diaryState!.entries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
-      print('I NEED TO INSERT AT $insertIdx');
+      //print('I NEED TO INSERT AT $insertIdx');
 
       setState(() {
-        if(adding) {
-          diaryEntries.insert(0,newEntry);
-        } else {
-          diaryEntries.insert(insertIdx,newEntry);
-        }
+        //Code below no longer needed as it is sorting the entries
+        // if(adding) {
+        //   diaryEntries.insert(0,newEntry);
+        // } else {
+        //   diaryEntries.insert(insertIdx,newEntry);
+        // }
+        diaryEntries.add(newEntry);
+        diaryEntries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
         //Update the diary object
         List<DiaryEntry> newAndExistingEntries =  [...diaryState!.entries,newEntry];
         
@@ -78,7 +78,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AddDiaryEntryWidget(diaryId: widget.diary.id, updateEntries: updateDiaryEntries,);
+          return AddDiaryEntryWidget(
+            diaryId: widget.diary.id, 
+            updateEntries: updateDiaryEntries,
+            diaryEntryDateTime: selectedDate,
+          );
         },
       );
     }
@@ -166,8 +170,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
               Builder(
                 builder: (ctx) {
                   DateTime now = DateTime.now();
-
-                  print("NOW ${now.day} ${selectedDate.day} ");
 
                   if( (now.day == selectedDate.day) && (now.month == selectedDate.month) && (now.year == selectedDate.year)) {
                     return const IconButton(
