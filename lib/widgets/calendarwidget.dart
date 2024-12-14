@@ -122,7 +122,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         if(widget.dateActions != null) {
           
           clickAction = widget.dateActions?[DateTime(incDate.year,incDate.month,incDate.day)];
-          if(clickAction != null) {
+          if(clickAction != null && incDate.month == selectedDate.month) {
             print('I SHOULD ADD A FUNCTION');
             dayState = DayState.active;
           } else {

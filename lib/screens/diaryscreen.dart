@@ -84,6 +84,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
         List<DiaryEntry> newAndExistingEntries =  [...diaryState!.entries,newEntry];
         
         diaryState!.entries = newAndExistingEntries;
+        //For updating the calendar
+        for ( DiaryEntry de in diaryState!.entries) {
+          activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
+        }
       });
     }
 
