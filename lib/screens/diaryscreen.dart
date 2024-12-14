@@ -27,6 +27,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
     String title = "Diary";
     DateTime selectedDate =  DateTime.now();
     Diary? diaryState;
+    Map<DateTime,Function> activeDiaryDays = {};
 
     List<DiaryEntry> getDiaryEntriesByDate(DateTime? searchDate) {
       List<DiaryEntry> newDiaryEntries = diaryState!.entries;
@@ -38,12 +39,23 @@ class _DiaryScreenState extends State<DiaryScreen> {
       print('NEW DIARY ENTRIES $newDiaryEntries');
       return newDiaryEntries;
     }
+
+    setCurrentDate(DateTime newDate) {
+      setState(() {
+        selectedDate = newDate;
+        diaryEntries = getDiaryEntriesByDate(newDate);
+      });
+    }
     
     @override
     void initState() {
       diaryState = widget.diary;
+      //Load the calendar with the dates that have entries
+      for ( DiaryEntry de in diaryState!.entries) {
+        activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
+      }
       //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
-      print("DO I GET HERE");
+      print("DO I GET HERE $activeDiaryDays");
       diaryEntries = getDiaryEntriesByDate(DateTime.now());
       super.initState();
     }
@@ -204,7 +216,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
             // ),
             SizedBox(
               height: 180,
-              child: CalendarWidget()
+              child: CalendarWidget(selectedDate: selectedDate, dateActions: activeDiaryDays,)
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -216,8 +228,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     List<DiaryEntry> newEntries = getDiaryEntriesByDate(prevDate);
                     setState(() {
                       diaryEntries = newEntries;
+                      selectedDate = prevDate;
+  
                     });
-                    selectedDate = prevDate;
+                   
                   }, 
                   icon: const Icon(Icons.arrow_back),
                 ),
@@ -246,8 +260,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           List<DiaryEntry> newEntries = getDiaryEntriesByDate(nextDate);
                           setState(() {
                             diaryEntries = newEntries;
+                            selectedDate = nextDate;
                           });
-                          selectedDate = nextDate;
+                          
                         }, 
                         icon: const Icon(Icons.arrow_forward),
                       );
@@ -273,6 +288,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
+                  textAlign: TextAlign.center,
                 )
                 : ListView.builder(
                   itemCount: diaryEntries.length,

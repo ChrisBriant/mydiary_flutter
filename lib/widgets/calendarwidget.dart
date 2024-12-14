@@ -120,11 +120,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
         //Check for action
         if(widget.dateActions != null) {
+          
           clickAction = widget.dateActions?[DateTime(incDate.year,incDate.month,incDate.day)];
           if(clickAction != null) {
+            print('I SHOULD ADD A FUNCTION');
             dayState = DayState.active;
+          } else {
+            print("NOT SETTING THE FUNCTION");
           }
           
+        }
+
+        onPressOnDate(DateTime dt) {
+          print(dt);
         }
 
         weekDays.add(
@@ -172,7 +180,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           ? Container(
             color: getDayColor(calDay.dayState),
             child: InkWell(
-              onLongPress:  () => calDay.clickAction!(),
+              onLongPress:  () => calDay.clickAction!(calDay.date),
               child: SizedBox(
                 width: 40,
                 height: 20,
@@ -202,6 +210,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void initState() {
     super.initState();
+    print("I AM INIT STATE");
     if(widget.selectedDate != null) {
       selectedDate = widget.selectedDate!;
     }
@@ -209,6 +218,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("I AM BUILDING ${widget.selectedDate} $selectedDate");
+
+    if(widget.selectedDate != selectedDate && widget.selectedDate != null) {
+      print('Date is not right');
+    }
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
