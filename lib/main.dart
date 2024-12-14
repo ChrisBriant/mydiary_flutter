@@ -24,7 +24,7 @@ class MyDiary extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor: Colors.blueGrey,
-        scaffoldBackgroundColor: Colors.blueGrey,
+        //scaffoldBackgroundColor: Colors.blueGrey,
         appBarTheme: AppBarTheme(
           color: Colors.brown.shade800,
           foregroundColor: Colors.white

@@ -3,6 +3,7 @@ import '../data/database.dart';
 import '../widgets/adddiaryentrywidget.dart';
 import '../widgets/viewdiaryentrywidget.dart';
 import '../helpers/helpers.dart';
+import '../widgets/calendarwidget.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -130,6 +131,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
       
     }
 
+    print("Height ${MediaQuery.of(context).size.height}");
+    print("PADDING TOP ${MediaQuery.of(context).padding.top}");
+    print("PADDING BOTOM ${MediaQuery.of(context).padding.bottom}");
 
 
 
@@ -139,26 +143,49 @@ class _DiaryScreenState extends State<DiaryScreen> {
         title: Text(widget.diary.name),
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: [
-              IconButton(
-                onPressed: () => showAddDiaryDialog(), 
-                icon: const Icon(Icons.home)
-              ),
-              IconButton(
-                onPressed: () => showAddDiaryDialog(), 
-               icon: const Icon(Icons.library_add_outlined)
-              ),
-              IconButton(
-                onPressed: () => exportDiary(), 
-                icon: const Icon(Icons.download)
-              ),
-              IconButton(
-                onPressed: (){}, 
-                icon: const Icon(Icons.import_contacts)
-              )
-      ],
-      body: ColoredBox(
-        color: Colors.white,
+      // persistentFooterButtons: [
+      //         IconButton(
+      //           onPressed: () => showAddDiaryDialog(), 
+      //           icon: const Icon(Icons.home)
+      //         ),
+      //         IconButton(
+      //           onPressed: () => showAddDiaryDialog(), 
+      //          icon: const Icon(Icons.library_add_outlined)
+      //         ),
+      //         IconButton(
+      //           onPressed: () => exportDiary(), 
+      //           icon: const Icon(Icons.download)
+      //         ),
+      //         IconButton(
+      //           onPressed: (){}, 
+      //           icon: const Icon(Icons.import_contacts)
+      //         )
+      // ],
+      bottomNavigationBar: ColoredBox(
+        color: Colors.blueGrey,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              onPressed: () => showAddDiaryDialog(), 
+              icon: const Icon(Icons.home)
+            ),
+            IconButton(
+              onPressed: () => showAddDiaryDialog(), 
+              icon: const Icon(Icons.library_add_outlined)
+            ),
+            IconButton(
+              onPressed: () => exportDiary(), 
+              icon: const Icon(Icons.download)
+            ),
+            IconButton(
+              onPressed: (){}, 
+              icon: const Icon(Icons.import_contacts)
+            )
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -175,6 +202,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
             //     )
             //   ],
             // ),
+            SizedBox(
+              height: 180,
+              child: CalendarWidget()
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

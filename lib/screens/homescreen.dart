@@ -35,6 +35,7 @@ class Home extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Image.asset('assets/diary_banner_image.png'),
           const Text(aboutText),
           ElevatedButton(
             onPressed: () => showDiaryListDialog(), 
