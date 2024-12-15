@@ -9,19 +9,18 @@ import 'package:path_provider/path_provider.dart';
 class FileListWidget extends StatelessWidget {
   const FileListWidget({super.key});
 
-  Future<List<Widget>> getFileList() async {
+  Future<List<Widget>> getFileList(BuildContext ctx) async {
     final Directory? directory = await getDownloadsDirectory();
     if(directory != null) {
       try {
         List<FileSystemEntity> fileList = await directory.list().toList();
         List filteredFileList = fileList.where((item) => item.path.endsWith(".json")).toList();
-        //print('This is the filelist ${filteredFileList}');
         //Transform the files list into a list of widgets which can be used
         List<Widget> savedFiles = [];
         for (FileSystemEntity f in filteredFileList) {
           savedFiles.add(
             InkWell(
-                onLongPress: () {},
+                onLongPress: () => showImportFileDialog(ctx,Helpers.stripToFileName(f.path),f),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
                   decoration: BoxDecoration(
@@ -63,6 +62,45 @@ class FileListWidget extends StatelessWidget {
     }
   }
 
+  showImportFileDialog(BuildContext context, String diaryName, FileSystemEntity f) {
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: Text('Import $diaryName',
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold
+          ),
+        ),
+        content: SizedBox(
+          width: 300,
+          height: 100,
+          child: Column(
+            children: [
+              Text(
+                'Are you sure you want to import $diaryName?',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10,),
+              const Text('This will erase all diary entries in this diary.', textAlign: TextAlign.center,)
+            ],
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+              onPressed: () {}, 
+              child: const Text('Yes')
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(), 
+              child: const Text('No')
+            )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ContainerDialog(
@@ -74,7 +112,7 @@ class FileListWidget extends StatelessWidget {
         ),
       ), 
       content: FutureBuilder<List<Widget>>(
-        future: getFileList(), 
+        future: getFileList(context), 
         builder: (ctx,sn) => sn.connectionState == ConnectionState.waiting
           ? const SizedBox(
               width: 300,
