@@ -77,6 +77,8 @@ flutter:
   assets:
     - assets/diary.png
     - assets/diary_banner_image.png
+    - assets/open_diary_3.png
+    - assets/create_diary_3.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

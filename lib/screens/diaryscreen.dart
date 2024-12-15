@@ -177,13 +177,19 @@ class _DiaryScreenState extends State<DiaryScreen> {
       //           icon: const Icon(Icons.import_contacts)
       //         )
       // ],
+      floatingActionButton: CircleAvatar(
+        child: IconButton(
+          onPressed: () => showAddDiaryDialog(), 
+          icon: const Icon(Icons.library_add_outlined)
+        ),
+      ),
       bottomNavigationBar: ColoredBox(
         color: Colors.blueGrey,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              onPressed: () => showAddDiaryDialog(), 
+              onPressed: () => Navigator.of(context).popAndPushNamed('/homescreen'), 
               icon: const Icon(Icons.home)
             ),
             IconButton(

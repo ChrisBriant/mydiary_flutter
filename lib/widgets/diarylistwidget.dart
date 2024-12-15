@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './containerdialog.dart';
 import '../data/database.dart';
 import '../helpers/helpers.dart';
+import '../widgets/loadingwidget.dart';
 
 class DiaryListWidget extends StatelessWidget {
   const DiaryListWidget({super.key});
@@ -15,7 +16,11 @@ class DiaryListWidget extends StatelessWidget {
       content: FutureBuilder<List<Diary>>(
         future: db.getDiaries(), 
         builder: (ctx,sn) => sn.connectionState == ConnectionState.waiting
-          ? const CircularProgressIndicator()
+          ? const SizedBox(
+              width: 300,
+              height: 300,
+              child: LoadingWidget()
+          )
           : sn.data!.isEmpty
             ? const SizedBox(
               width: 300,
