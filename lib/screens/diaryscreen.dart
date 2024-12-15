@@ -4,6 +4,7 @@ import '../widgets/adddiaryentrywidget.dart';
 import '../widgets/viewdiaryentrywidget.dart';
 import '../helpers/helpers.dart';
 import '../widgets/calendarwidget.dart';
+import '../widgets/filelistwidget.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -72,12 +73,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
       //print('I NEED TO INSERT AT $insertIdx');
 
       setState(() {
-        //Code below no longer needed as it is sorting the entries
-        // if(adding) {
-        //   diaryEntries.insert(0,newEntry);
-        // } else {
-        //   diaryEntries.insert(insertIdx,newEntry);
-        // }
         diaryEntries.add(newEntry);
         diaryEntries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
         //Update the diary object
@@ -120,9 +115,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
       final Directory? directory = await getDownloadsDirectory();
       if(directory != null) {
         try {
-          final file = File('${directory.path}/diary_data.json');
+          
+          final file = File('${directory.path}/${widget.diary.name}.jason');
           await file.writeAsString(jsonData);
-          print('I SHOULD DOWNLOAD ${directory.path}/diary_data.json');
+          //print('I SHOULD DOWNLOAD ${directory.path}/${widget.diary.name}.json');
         } catch(err) {
           print("An error occured $err");
         }
@@ -130,9 +126,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
       } else {
         throw Exception('Download is not possible');
       }
-
-
-      //
     }
 
     void exportDiary() async {
@@ -144,8 +137,71 @@ class _DiaryScreenState extends State<DiaryScreen> {
       } catch(err) {
         print('AN ERROR OCCURRED, $err');
       }
-      
     }
+
+    void showFileListDialog() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const FileListWidget();
+        },
+      );
+    }
+
+    // Future<List<Widget>> getFileList() async {
+    //   final Directory? directory = await getDownloadsDirectory();
+    //   if(directory != null) {
+    //     try {
+    //       List<FileSystemEntity> fileList = await directory.list().toList();
+    //       List filteredFileList = fileList.where((item) => item.path.endsWith(".json")).toList();
+    //       print('This is the filelist ${filteredFileList}');
+    //       //Transform the files list into a list of widgets which can be used
+    //       List<Widget> savedFiles = [];
+    //       for (FileSystemEntity f in filteredFileList) {
+    //         savedFiles.add(
+    //           InkWell(
+    //               onLongPress: () {},
+    //               child: Container(
+    //                 margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
+    //                 decoration: BoxDecoration(
+    //                 color: Colors.white,
+    //                 borderRadius: BorderRadius.circular(8),
+    //                 boxShadow: [
+    //                   BoxShadow(
+    //                     color: Colors.grey.withOpacity(0.5),
+    //                     spreadRadius: 3,
+    //                     blurRadius: 4,
+    //                     offset: const Offset(0, 3),
+    //                   ),
+    //                 ]
+    //                 ),
+    //                 child: ListTile(
+    //                   key: ValueKey(f.hashCode),
+    //                   title: Text(
+    //                     Helpers.stripToFileName(f.path),
+    //                     style: const TextStyle(
+    //                       fontWeight: FontWeight.bold,
+    //                       color: Color.fromARGB(255, 1, 45, 80), 
+    //                       fontSize: 20.0,
+    //                     ),
+    //                   ),
+    //                   dense: true,
+    //                 ),
+    //               ),
+    //             ),
+    //         );
+            
+    //       }
+    //       return savedFiles;
+    //     } catch(err) {
+    //       print("An error occured $err");
+    //       throw Exception('Unable to retrieve files');
+    //     }
+    //   } else {
+    //     throw Exception('Download is not possible');
+    //   }
+      
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -177,7 +233,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
               icon: const Icon(Icons.download)
             ),
             IconButton(
-              onPressed: (){}, 
+              onPressed: () => showFileListDialog(), 
               icon: const Icon(Icons.import_contacts)
             )
           ],

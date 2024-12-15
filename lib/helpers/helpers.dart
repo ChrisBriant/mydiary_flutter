@@ -101,4 +101,10 @@ class Helpers {
     String y = date.year.toString();
     return "$d/$m/$y";
   }
+
+  //Take a file path and return only the filename part
+  static String stripToFileName(String fName) {
+    List<String> fileParts = fName.split('/');
+    return fileParts.last.split('.')[0];
+  }
 }
