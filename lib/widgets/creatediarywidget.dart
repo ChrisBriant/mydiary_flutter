@@ -34,7 +34,13 @@ class _CreateDiaryWidgetState extends State<CreateDiaryWidget> {
         controller: textController,
       ),
       confirmName: "Add",
-      title: const Text('Add Diary', textAlign: TextAlign.center,),
+      title: const Text(
+        'Add Diary', 
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+      ),
     );
   }
 }

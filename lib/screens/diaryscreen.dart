@@ -226,7 +226,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         }, 
                         icon: const Icon(Icons.arrow_back),
                       ),
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width * .4,
                         height: 70,
                         child: Text(Helpers.getDisplayDate(selectedDate),
@@ -292,28 +292,44 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 : ListView.builder(
                   itemCount: diaryEntries.length,
                   itemBuilder: (ctx, idx) => InkWell(
-                    onLongPress: () => showViewDiaryEntryDialog(diaryEntries[idx]),
-                    child: ListTile(
-                        key: ValueKey(diaryEntries[idx].id),
-                        title: Text(
-                          diaryEntries[idx].entry,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1, // Limit to one line
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.brown, 
-                            fontSize: 20.0,
+                      onLongPress: () => showViewDiaryEntryDialog(diaryEntries[idx]),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
+                        decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 4,
+                            offset: const Offset(0, 3),
                           ),
-                        ),
-                        subtitle: Text(
-                          Helpers.getDisplayDate(diaryEntries[idx].dateCreated),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.blue, 
-                            fontSize: 16.0,
+                        ],
+                      ),
+
+                      child: ListTile(
+                          key: ValueKey(diaryEntries[idx].id),
+                          title: Text(
+                            diaryEntries[idx].entry,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1, // Limit to one line
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 1, 45, 80), 
+                              fontSize: 20.0,
+                            ),
                           ),
-                        ),
-                        dense: true,
+                          subtitle: Text(
+                            Helpers.getDisplayDate(diaryEntries[idx].dateCreated),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.blue, 
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          dense: true,
+                      ),
                     ),
                   )
                 ),

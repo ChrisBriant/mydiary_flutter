@@ -125,7 +125,13 @@ class _AddDiaryEntryWidgetState extends State<AddDiaryEntryWidget> {
         ),
       ),
       confirmName: "Add",
-      title: const Text('Add a Diary Entry'),
+      title: const Text(
+        'Add a Diary Entry',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+      ),
     );
   }
 }

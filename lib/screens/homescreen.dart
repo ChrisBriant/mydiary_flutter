@@ -33,115 +33,117 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Diary'),
       ),
-      body: Column(
-        children: [
-          Image.asset('assets/diary_banner_image.png'),
-          const SizedBox(height: 10,),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            child: const Card(
-              child: Padding(
-                padding: EdgeInsets.all(4.0),
-                child: Text(
-                  aboutText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset('assets/diary_banner_image.png'),
+            const SizedBox(height: 10,),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: const Card(
+                child: Padding(
+                  padding: EdgeInsets.all(4.0),
+                  child: Text(
+                    aboutText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 10,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () => showDiaryListDialog(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade200,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 4,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  width: MediaQuery.of(context).size.width * .4,
-                  height: MediaQuery.of(context).size.width * .4,
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Open Diary',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold
+            const SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () => showDiaryListDialog(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 3,
+                          blurRadius: 4,
+                          offset: const Offset(0, 3),
                         ),
-                      ),
-                      Image.asset(
-                        'assets/open_diary_3.png',
-                        width: MediaQuery.of(context).size.width * .3,
-                        height: MediaQuery.of(context).size.width * .3,
-                      ),
-                    ],
-                  )
-                ),
-              ),
-              InkWell(
-                onTap: () => showAddDiaryDialog(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade200,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 4,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  width: MediaQuery.of(context).size.width * .4,
-                  height: MediaQuery.of(context).size.width * .4,
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Create Diary',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold
+                      ]
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    width: MediaQuery.of(context).size.width * .4,
+                    height: MediaQuery.of(context).size.width * .4,
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Open Diary',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
-                      ),
-                      Image.asset(
-                        'assets/create_diary_3.png',
-                        width: MediaQuery.of(context).size.width * .3,
-                        height: MediaQuery.of(context).size.width * .3,
-                      ),
-                    ],
-                  )
+                        Image.asset(
+                          'assets/open_diary_3.png',
+                          width: MediaQuery.of(context).size.width * .3,
+                          height: MediaQuery.of(context).size.width * .3,
+                        ),
+                      ],
+                    )
+                  ),
                 ),
-              ),
-            ],
-          )
-          // ElevatedButton(
-          //   onPressed: () => showDiaryListDialog(), 
-          //   child: const Text('Open Diary')
-          // ),
-          // ElevatedButton(
-          //   onPressed: () => showAddDiaryDialog(), 
-          //   child: const Text('Create Diary')
-          // ),
-
-        ]
+                InkWell(
+                  onTap: () => showAddDiaryDialog(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 3,
+                          blurRadius: 4,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    width: MediaQuery.of(context).size.width * .4,
+                    height: MediaQuery.of(context).size.width * .4,
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Create Diary',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/create_diary_3.png',
+                          width: MediaQuery.of(context).size.width * .3,
+                          height: MediaQuery.of(context).size.width * .3,
+                        ),
+                      ],
+                    )
+                  ),
+                ),
+              ],
+            )
+            // ElevatedButton(
+            //   onPressed: () => showDiaryListDialog(), 
+            //   child: const Text('Open Diary')
+            // ),
+            // ElevatedButton(
+            //   onPressed: () => showAddDiaryDialog(), 
+            //   child: const Text('Create Diary')
+            // ),
         
+          ]
+          
+        ),
       ),
     );
   }

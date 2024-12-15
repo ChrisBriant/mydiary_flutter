@@ -101,7 +101,13 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
           ),
         ),
       ),
-      title: const Text('Diary Entry', textAlign: TextAlign.center,),
+      title: const Text(
+        'Diary Entry', 
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),  
+      ),
     );
   }
 }

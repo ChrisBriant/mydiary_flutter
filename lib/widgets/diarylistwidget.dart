@@ -12,7 +12,13 @@ class DiaryListWidget extends StatelessWidget {
     AppDatabase db = AppDatabase();
 
     return ContainerDialog(
-      title: const Text("My Diaries", textAlign: TextAlign.center), 
+      title: const Text(
+        "My Diaries", 
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+      ), 
       content: FutureBuilder<List<Diary>>(
         future: db.getDiaries(), 
         builder: (ctx,sn) => sn.connectionState == ConnectionState.waiting
@@ -45,30 +51,45 @@ class DiaryListWidget extends StatelessWidget {
                   onLongPress: () => Navigator.of(ctx).popAndPushNamed('/diaryscreen',arguments: {
                     'diary' : sn.data![idx]
                   }),
-                  child: ListTile(
-                    key: ValueKey(sn.data![idx].id),
-                    title: Text(
-                      sn.data![idx].name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 1, 45, 80), 
-                        fontSize: 20.0,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
+                    decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 4,
+                        offset: const Offset(0, 3),
                       ),
+                    ]
                     ),
-                    subtitle: Text(
-                      Helpers.getDisplayDate(sn.data![idx].dateCreated),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.blue, 
-                        fontSize: 16.0,
+                    child: ListTile(
+                      key: ValueKey(sn.data![idx].id),
+                      title: Text(
+                        sn.data![idx].name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 1, 45, 80), 
+                          fontSize: 20.0,
+                        ),
                       ),
+                      subtitle: Text(
+                        Helpers.getDisplayDate(sn.data![idx].dateCreated),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: Colors.blue, 
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      dense: true,
+                      // titleTextStyle: const TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   color: Colors.brown, 
+                      //   fontSize: 30.0,
+                      // ),
                     ),
-                    dense: true,
-                    // titleTextStyle: const TextStyle(
-                    //   fontWeight: FontWeight.bold,
-                    //   color: Colors.brown, 
-                    //   fontSize: 30.0,
-                    // ),
                   ),
                 ),
               ),
