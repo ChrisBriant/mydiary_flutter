@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class CalendarWidget extends StatefulWidget {
   final Map<DateTime,Function>? dateActions;
   final DateTime? selectedDate;
+  final Function? currentClickAction;
 
   const CalendarWidget({
     this.dateActions,
     this.selectedDate,
+    this.currentClickAction,
     super.key
   });
 
@@ -107,33 +109,35 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
       for(int i=0;i<7;i++) {
         DayState dayState = DayState.disabled;
-        
         DateTime today = DateTime.now();
+        Function? clickAction;
 
         if( (incDate.day == today.day) && (incDate.month == today.month) && (incDate.year == today.year) ) {
           dayState = DayState.current;
+          
+          print("CURRENT CLICK ACTION ${clickAction}");
         } else if(incDate.month == selectedDate.month) {
           dayState = DayState.enabled;
         }
 
-        Function? clickAction;
 
         //Check for action
         if(widget.dateActions != null) {
           
           clickAction = widget.dateActions?[DateTime(incDate.year,incDate.month,incDate.day)];
           if(clickAction != null && incDate.month == selectedDate.month) {
-            print('I SHOULD ADD A FUNCTION');
             dayState = DayState.active;
-          } else {
-            print("NOT SETTING THE FUNCTION");
           }
           
         }
 
-        onPressOnDate(DateTime dt) {
-          print(dt);
+        //Not sure why, but I have to set it here as the above block somehow resets it to null
+        if(dayState == DayState.current) {
+          clickAction = widget.currentClickAction;
         }
+        
+
+
 
         weekDays.add(
           CalendarDay(
@@ -175,6 +179,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       List<Container> calDays = [];
 
       for(CalendarDay calDay in week) {
+        if(calDay.dayState == DayState.current) {
+          print("ON CURRENT, ${calDay.clickAction}");
+        }
         calDays.add(
           calDay.clickAction != null
           ? Container(

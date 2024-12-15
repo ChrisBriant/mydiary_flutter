@@ -170,7 +170,7 @@ class AppDatabase {
       }
     }
 
-    await Future.delayed(Duration(seconds: 5));
+    //await Future.delayed(Duration(seconds: 5));
 
     return uniqueDiaries; 
   }

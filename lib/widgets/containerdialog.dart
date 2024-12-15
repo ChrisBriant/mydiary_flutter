@@ -25,6 +25,7 @@ class _ContainerDialogState extends State<ContainerDialog> {
   Widget build(BuildContext context) {
 
     return AlertDialog(
+      backgroundColor: Colors.yellow.shade200,
       title: widget.title,
       content:  widget.content,
       actionsAlignment: MainAxisAlignment.center,

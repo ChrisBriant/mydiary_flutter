@@ -51,7 +51,7 @@ class DiaryListWidget extends StatelessWidget {
                       sn.data![idx].name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.brown, 
+                        color: Color.fromARGB(255, 1, 45, 80), 
                         fontSize: 20.0,
                       ),
                     ),

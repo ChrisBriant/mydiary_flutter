@@ -147,36 +147,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
       
     }
 
-    print("Height ${MediaQuery.of(context).size.height}");
-    print("PADDING TOP ${MediaQuery.of(context).padding.top}");
-    print("PADDING BOTOM ${MediaQuery.of(context).padding.bottom}");
-
-
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(widget.diary.name),
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      // persistentFooterButtons: [
-      //         IconButton(
-      //           onPressed: () => showAddDiaryDialog(), 
-      //           icon: const Icon(Icons.home)
-      //         ),
-      //         IconButton(
-      //           onPressed: () => showAddDiaryDialog(), 
-      //          icon: const Icon(Icons.library_add_outlined)
-      //         ),
-      //         IconButton(
-      //           onPressed: () => exportDiary(), 
-      //           icon: const Icon(Icons.download)
-      //         ),
-      //         IconButton(
-      //           onPressed: (){}, 
-      //           icon: const Icon(Icons.import_contacts)
-      //         )
-      // ],
       floatingActionButton: CircleAvatar(
         child: IconButton(
           onPressed: () => showAddDiaryDialog(), 
@@ -184,7 +160,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
         ),
       ),
       bottomNavigationBar: ColoredBox(
-        color: Colors.blueGrey,
+        color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -211,77 +187,90 @@ class _DiaryScreenState extends State<DiaryScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(""),
-            // Row(
-            //   children: [
-            //     ElevatedButton(
-            //       onPressed: () => showAddDiaryDialog(), 
-            //       child: const Text('Add Entry')
-            //     ),
-            //     IconButton(
-            //       onPressed: () => exportDiary(), 
-            //       icon: Icon(Icons.download)
-            //     )
-            //   ],
-            // ),
-            SizedBox(
-              height: 180,
-              child: CalendarWidget(selectedDate: selectedDate, dateActions: activeDiaryDays,)
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    DateTime prevDate = selectedDate.subtract(const Duration(days: 1));
-        
-                    List<DiaryEntry> newEntries = getDiaryEntriesByDate(prevDate);
-                    setState(() {
-                      diaryEntries = newEntries;
-                      selectedDate = prevDate;
-  
-                    });
-                   
-                  }, 
-                  icon: const Icon(Icons.arrow_back),
-                ),
-                Text(Helpers.getDisplayDate(selectedDate),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.only(top: 8),
+                  child: SizedBox(
+                    height: 180,
+                    child: CalendarWidget(
+                      selectedDate: selectedDate, 
+                      dateActions: activeDiaryDays,
+                      currentClickAction: setCurrentDate,
+                    )
                   ),
                 ),
-                Builder(
-                  builder: (ctx) {
-                    DateTime now = DateTime.now();
-        
-                    if( (now.day == selectedDate.day) && (now.month == selectedDate.month) && (now.year == selectedDate.year)) {
-                      return const IconButton(
-                        onPressed: null, 
-                        icon: Icon(Icons.arrow_forward)
-                      );
-                    } else {
-                      return IconButton(
-                        onPressed:
-                          () {
-                          DateTime nextDate = selectedDate.add(const Duration(days: 1));
-                      
-                          List<DiaryEntry> newEntries = getDiaryEntriesByDate(nextDate);
-                          setState(() {
-                            diaryEntries = newEntries;
-                            selectedDate = nextDate;
-                          });
-                          
-                        }, 
-                        icon: const Icon(Icons.arrow_forward),
-                      );
-                    }
-                  },
-                ),    
-              ],
+              ),
             ),
             Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: Card(
+                child: SizedBox(
+                  width : double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          DateTime prevDate = selectedDate.subtract(const Duration(days: 1));
+                          
+                          List<DiaryEntry> newEntries = getDiaryEntriesByDate(prevDate);
+                          setState(() {
+                            diaryEntries = newEntries;
+                            selectedDate = prevDate;
+                    
+                          });
+                         
+                        }, 
+                        icon: const Icon(Icons.arrow_back),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * .4,
+                        height: 70,
+                        child: Text(Helpers.getDisplayDate(selectedDate),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Builder(
+                        builder: (ctx) {
+                          DateTime now = DateTime.now();
+                          
+                          if( (now.day == selectedDate.day) && (now.month == selectedDate.month) && (now.year == selectedDate.year)) {
+                            return const IconButton(
+                              onPressed: null, 
+                              icon: Icon(Icons.arrow_forward)
+                            );
+                          } else {
+                            return IconButton(
+                              onPressed:
+                                () {
+                                DateTime nextDate = selectedDate.add(const Duration(days: 1));
+                            
+                                List<DiaryEntry> newEntries = getDiaryEntriesByDate(nextDate);
+                                setState(() {
+                                  diaryEntries = newEntries;
+                                  selectedDate = nextDate;
+                                });
+                                
+                              }, 
+                              icon: const Icon(Icons.arrow_forward),
+                            );
+                          }
+                        },
+                      ),    
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
               margin: const EdgeInsets.all(8),
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
