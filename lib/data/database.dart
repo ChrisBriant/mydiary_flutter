@@ -208,9 +208,6 @@ class AppDatabase {
         );
       }
     }
-                for(DiaryEntry de in diaryObj.entries ) {
-                  print("DE ${de.entry}");
-                }
     return diaryObj;
 
   }
@@ -266,6 +263,18 @@ class AppDatabase {
     } else {
       throw Exception('Unable to delete diary entry');
     }
+
+  }
+
+
+  Future<void> deleteDiary(String diaryId) async {
+    final db = await database();
+
+    await db.delete(
+      'diary',
+      where: "id=?",
+      whereArgs: [diaryId]
+    );
 
   }
 

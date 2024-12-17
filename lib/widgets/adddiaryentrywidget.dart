@@ -44,7 +44,7 @@ class _AddDiaryEntryWidgetState extends State<AddDiaryEntryWidget> {
         Navigator.of(ctx).pop();
       }
     } catch(err) {
-      print('DATABASE ERROR $err');
+      //print('DATABASE ERROR $err');
     }
     
   }
@@ -82,14 +82,6 @@ class _AddDiaryEntryWidgetState extends State<AddDiaryEntryWidget> {
                             fontSize : 20,
                           ),
                         ),
-                        // SizedBox(
-                        //   width: 50,
-                        //   child: TimeSelectWidget(
-                        //     hour: 0, 
-                        //     minute: 0, 
-                        //     onUpdate: () {}
-                        //   ),
-                        // )
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TimeSelectWidget(

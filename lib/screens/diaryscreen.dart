@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import '../data/database.dart';
 import '../widgets/adddiaryentrywidget.dart';
 import '../widgets/viewdiaryentrywidget.dart';
@@ -152,7 +153,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
           
           final file = File('${directory.path}/${widget.diary.name}.json');
           await file.writeAsString(jsonData);
-          //print('I SHOULD DOWNLOAD ${directory.path}/${widget.diary.name}.json');
         } catch(err) {
           //print("An error occured $err");
         }
@@ -186,60 +186,36 @@ class _DiaryScreenState extends State<DiaryScreen> {
       );
     }
 
-    // Future<List<Widget>> getFileList() async {
-    //   final Directory? directory = await getDownloadsDirectory();
-    //   if(directory != null) {
-    //     try {
-    //       List<FileSystemEntity> fileList = await directory.list().toList();
-    //       List filteredFileList = fileList.where((item) => item.path.endsWith(".json")).toList();
-    //       print('This is the filelist ${filteredFileList}');
-    //       //Transform the files list into a list of widgets which can be used
-    //       List<Widget> savedFiles = [];
-    //       for (FileSystemEntity f in filteredFileList) {
-    //         savedFiles.add(
-    //           InkWell(
-    //               onLongPress: () {},
-    //               child: Container(
-    //                 margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
-    //                 decoration: BoxDecoration(
-    //                 color: Colors.white,
-    //                 borderRadius: BorderRadius.circular(8),
-    //                 boxShadow: [
-    //                   BoxShadow(
-    //                     color: Colors.grey.withOpacity(0.5),
-    //                     spreadRadius: 3,
-    //                     blurRadius: 4,
-    //                     offset: const Offset(0, 3),
-    //                   ),
-    //                 ]
-    //                 ),
-    //                 child: ListTile(
-    //                   key: ValueKey(f.hashCode),
-    //                   title: Text(
-    //                     Helpers.stripToFileName(f.path),
-    //                     style: const TextStyle(
-    //                       fontWeight: FontWeight.bold,
-    //                       color: Color.fromARGB(255, 1, 45, 80), 
-    //                       fontSize: 20.0,
-    //                     ),
-    //                   ),
-    //                   dense: true,
-    //                 ),
-    //               ),
-    //             ),
-    //         );
-            
-    //       }
-    //       return savedFiles;
-    //     } catch(err) {
-    //       print("An error occured $err");
-    //       throw Exception('Unable to retrieve files');
-    //     }
-    //   } else {
-    //     throw Exception('Download is not possible');
-    //   }
-      
-    // }
+    handleDeleteDiary(BuildContext ctx) {
+      showDialog(
+        context: ctx, 
+        builder: (ctx) => AlertDialog(
+        title: const Text('Delete Diary', 
+          style: TextStyle(fontWeight: FontWeight.bold
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Text('Are you sure you want to delete ${widget.diary.name}?', textAlign: TextAlign.center,),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+            ElevatedButton(
+              onPressed: () async {
+                AppDatabase db = AppDatabase();
+                await db.deleteDiary(widget.diary.id);
+                if(ctx.mounted) {
+                  Navigator.of(ctx).popAndPushNamed('/homescreen');
+                }
+              }, 
+              child: const Text('Yes')
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(ctx).pop(), 
+              child: const Text('No')
+            )
+          ],
+        )
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -273,6 +249,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
             IconButton(
               onPressed: () => showFileListDialog(), 
               icon: const Icon(Icons.import_contacts)
+            ),
+            IconButton(
+              onPressed: () => handleDeleteDiary(context), 
+              icon: const Icon(Icons.delete_forever)
             )
           ],
         ),
