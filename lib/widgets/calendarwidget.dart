@@ -237,27 +237,34 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         children: [
           Container(
             width: 280,
-            height: 30,
+            height: 40,
             color: Colors.grey,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white,),
                   onPressed: () {
                     DateTime prevMonthDT = getFirstPrevMonth();
-
+            
                     setState(() {
                       selectedDate = prevMonthDT;
                     }); 
                   },  
                 ),
-                Text('${getMonthName(selectedDate.month)} ${selectedDate.year}'),
+                Text(
+                  '${getMonthName(selectedDate.month)} ${selectedDate.year}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
                 IconButton(
-                  icon: const Icon(Icons.arrow_forward),
+                  icon: const Icon(Icons.arrow_forward, color: Colors.white,),
                   onPressed: () {
                     DateTime nextMonth = getFirstNextMonth();
-
+            
                     setState(() {
                       selectedDate = nextMonth;
                     });

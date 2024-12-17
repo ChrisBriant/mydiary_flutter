@@ -106,6 +106,7 @@ class FileListWidget extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Text('Import $diaryName',
           textAlign: TextAlign.center,
+          overflow: TextOverflow.clip,
           style: const TextStyle(
             fontWeight: FontWeight.bold
           ),
@@ -116,8 +117,7 @@ class FileListWidget extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'Are you sure you want to import $diaryName?',
-                textAlign: TextAlign.center,
+                'Are you sure you want to import $diaryName?', textAlign: TextAlign.center
               ),
               const SizedBox(height: 10,),
               const Text('This will mege the data from the selected file into this diary.', textAlign: TextAlign.center,)
@@ -129,7 +129,7 @@ class FileListWidget extends StatelessWidget {
           ElevatedButton(
               onPressed: () async { 
                 Diary newDiary = await importDiaryFromFile(f,context);
-                onAfterImport(newDiary);
+                onAfterImport(newDiary, DateTime.now());
                 if(context.mounted) {
                   Navigator.of(context).pop();
                 }
@@ -180,8 +180,10 @@ class FileListWidget extends StatelessWidget {
               width: 300,
               height: 300,
               //color: Colors.amber,
-              child: Column(
-                children: sn.data!
+              child: SingleChildScrollView(
+                child: Column(
+                  children: sn.data!
+                ),
               )
             )
       ), 

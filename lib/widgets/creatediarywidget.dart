@@ -31,6 +31,7 @@ class _CreateDiaryWidgetState extends State<CreateDiaryWidget> {
     return ContainerDialog(
       confirmAction: () => addDiary(context),
       content:TextField(
+        maxLength: 30,
         controller: textController,
       ),
       confirmName: "Add",

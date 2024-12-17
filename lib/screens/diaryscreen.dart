@@ -49,13 +49,13 @@ class _DiaryScreenState extends State<DiaryScreen> {
     }
 
     //After an import the diary needs to be reloaded
-    updateDiaryAfterImport(Diary newDiary) {
-      for ( DiaryEntry de in newDiary!.entries) {
+    updateDiaryAfterImport(Diary newDiary, DateTime diaryDate) {
+      for ( DiaryEntry de in newDiary.entries) {
         activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
       }
       setState(() {
-        diaryEntries = getDiaryEntriesByDate(DateTime.now());
         diaryState = newDiary;
+        diaryEntries = getDiaryEntriesByDate(diaryDate);
       });
     }
     
@@ -66,8 +66,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
       for ( DiaryEntry de in diaryState!.entries) {
         activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
       }
-      //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
-      print("DO I GET HERE $activeDiaryDays");
       diaryEntries = getDiaryEntriesByDate(DateTime.now());
       super.initState();
     }
@@ -77,11 +75,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
     //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
 
     void updateDiaryEntries(newEntry, adding) {
-      //DiaryEntry replaceEntry = widget.diary.entries.firstWhere((diaryEntry) => diaryEntry.id == newEntry.id);
-      //int insertIdx = diaryEntries.indexWhere((DiaryEntry d) => d.id == newEntry.id);
       diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
       diaryState!.entries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
-      //print('I NEED TO INSERT AT $insertIdx');
 
       setState(() {
         diaryEntries.add(newEntry);
@@ -121,17 +116,45 @@ class _DiaryScreenState extends State<DiaryScreen> {
       );
     }
 
+    handleDeleteDiaryEntry(DiaryEntry entry, Diary diary) async {
+      showDialog(
+        context: context, 
+        builder: (BuildContext ctx) => AlertDialog(
+          title: const Text("Delete Diary Entry", style : TextStyle(fontWeight: FontWeight.bold)),
+          content: const Text('Are you sure you want to delete this diary entry?'),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                AppDatabase db = AppDatabase();
+                Diary newDiary =  await db.deleteDiaryEntry(entry.id, diary);
+                updateDiaryAfterImport(newDiary, entry.dateCreated);
+                if(ctx.mounted) {
+                  Navigator.of(ctx).pop();
+                }
+              }, 
+              child: const Text("Yes")
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text("No")
+            ),
+          ],
+        )
+      );
+    }
+
     Future<void> downloadJsonToFile(String jsonData) async {
     
       final Directory? directory = await getDownloadsDirectory();
       if(directory != null) {
         try {
           
-          final file = File('${directory.path}/${widget.diary.name}.jason');
+          final file = File('${directory.path}/${widget.diary.name}.json');
           await file.writeAsString(jsonData);
           //print('I SHOULD DOWNLOAD ${directory.path}/${widget.diary.name}.json');
         } catch(err) {
-          print("An error occured $err");
+          //print("An error occured $err");
         }
 
       } else {
@@ -139,14 +162,18 @@ class _DiaryScreenState extends State<DiaryScreen> {
       }
     }
 
-    void exportDiary() async {
+    void exportDiary(BuildContext ctx) async {
       String jsonData = jsonEncode(widget.diary.toJson());
 
-      print("Json Output $jsonData");
       try {
         await downloadJsonToFile(jsonData);
+        if(ctx.mounted) {
+          ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+            content: Text('Your diary has been exported')
+          ));
+        }
       } catch(err) {
-        print('AN ERROR OCCURRED, $err');
+        //print('AN ERROR OCCURRED, $err');
       }
     }
 
@@ -240,7 +267,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
               icon: const Icon(Icons.library_add_outlined)
             ),
             IconButton(
-              onPressed: () => exportDiary(), 
+              onPressed: () => exportDiary(context), 
               icon: const Icon(Icons.download)
             ),
             IconButton(
@@ -261,7 +288,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
                   child: SizedBox(
-                    height: 180,
+                    height: 190,
                     child: CalendarWidget(
                       selectedDate: selectedDate, 
                       dateActions: activeDiaryDays,
@@ -394,6 +421,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                               color: Colors.blue, 
                               fontSize: 16.0,
                             ),
+                          ),
+                          trailing: IconButton(
+                            onPressed: () => handleDeleteDiaryEntry(diaryEntries[idx], widget.diary), 
+                            icon: const Icon(Icons.delete_forever, color: Colors.red,)
                           ),
                           dense: true,
                       ),

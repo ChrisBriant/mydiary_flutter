@@ -195,9 +195,9 @@ class AppDatabase {
     //Map<String,dynamic> diaryData = data[0];
 
     Diary diaryObj = diary;
+    diaryObj.entries = []; // reset entries
 
     for(Map<String,dynamic> diaryEntry in data) {
-      print('DIARY ENTRY, $diaryEntry');
       if(diaryEntry['entryid'] != null) {
         diaryObj.entries.add(
           DiaryEntry(
@@ -208,7 +208,9 @@ class AppDatabase {
         );
       }
     }
-
+                for(DiaryEntry de in diaryObj.entries ) {
+                  print("DE ${de.entry}");
+                }
     return diaryObj;
 
   }
@@ -244,6 +246,25 @@ class AppDatabase {
       );
     } else {
       throw Exception('Failed to updated diary.');
+    }
+
+  }
+
+  Future<Diary> deleteDiaryEntry(String entryId, Diary diary) async {
+    final db = await database();
+
+    int rows = await db.delete(
+      'diaryentry',
+      where: "id=?",
+      whereArgs: [entryId]
+    );
+    
+    if(rows > 0) {
+      //Get the updated diary
+      Diary updatedDiary = await getDiary(diary);
+      return updatedDiary;
+    } else {
+      throw Exception('Unable to delete diary entry');
     }
 
   }
