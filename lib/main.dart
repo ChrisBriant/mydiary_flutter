@@ -21,10 +21,15 @@ class MyDiary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'My Diary',
       theme: ThemeData(
         primaryColor: Colors.blueGrey,
         scaffoldBackgroundColor: Colors.brown.shade100,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(Colors.amber),
+          )
+        ),
         appBarTheme: AppBarTheme(
           color: Colors.grey.shade800,
           foregroundColor: Colors.white
