@@ -175,6 +175,43 @@ class AppDatabase {
     return uniqueDiaries; 
   }
 
+  Future<Diary> getDiary(Diary diary) async {
+    final db = await database();
+
+    String sql = """
+      SELECT diary.id as id, name, diary.datecreated as datecreated, diaryentry.id as entryid,
+        entry, diaryentry.datecreated as entrydate FROM diary
+        LEFT JOIN diaryentry ON diaryentry.diaryid = diary.id
+        WHERE diary.id = "${diary.id}";
+    """;
+    List<Map<String, dynamic>> data = await db.rawQuery(sql);
+
+    if(data.isEmpty) {
+      throw Exception('Diary not found in database');
+    }
+
+    print("Does it fetch the data");
+
+    //Map<String,dynamic> diaryData = data[0];
+
+    Diary diaryObj = diary;
+
+    for(Map<String,dynamic> diaryEntry in data) {
+      print('DIARY ENTRY, $diaryEntry');
+      if(diaryEntry['entryid'] != null) {
+        diaryObj.entries.add(
+          DiaryEntry(
+            id: diaryEntry['entryid'], 
+            entry: diaryEntry['entry'], 
+            dateCreated: DateTime.parse(diaryEntry['entrydate'])
+          )
+        );
+      }
+    }
+
+    return diaryObj;
+
+  }
 
   Future<DiaryEntry> updateDiaryEntry(String entryId, String updatedEntry) async {
     final db = await database();

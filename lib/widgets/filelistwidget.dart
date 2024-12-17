@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mydiary/data/database.dart';
 import './containerdialog.dart';
 import '../helpers/helpers.dart';
 import '../widgets/loadingwidget.dart';
@@ -7,7 +10,14 @@ import 'package:path_provider/path_provider.dart';
 
 
 class FileListWidget extends StatelessWidget {
-  const FileListWidget({super.key});
+  final Diary diary;
+  final Function onAfterImport; 
+
+  const FileListWidget({
+    required this.diary,
+    required this.onAfterImport,
+    super.key
+  });
 
   Future<List<Widget>> getFileList(BuildContext ctx) async {
     final Directory? directory = await getDownloadsDirectory();
@@ -62,6 +72,34 @@ class FileListWidget extends StatelessWidget {
     }
   }
 
+  Future<Diary> importDiaryFromFile(FileSystemEntity f, BuildContext ctx) async {
+    AppDatabase db = AppDatabase();
+
+    File jsonFile = File(f.path);
+    String jsonData = await jsonFile.readAsString();
+    Map<String,dynamic> diaryData = jsonDecode(jsonData);
+    //print('DIARY DATA IS ${diaryData.}');
+    try {
+      for (var entry in diaryData['entries']) {
+        await db.addDiaryEntry(
+          diaryId: diary.id, 
+          entry: entry['entry'], 
+          diaryEntryDateTime: DateTime.parse(entry['dateCreated'])
+        );
+      }
+      if(ctx.mounted) {
+        Navigator.of(ctx).pop();
+      }
+      //Get the new diary
+      Diary newDiary = await db.getDiary(diary);
+      return newDiary;
+    } catch(err) {
+      print('ERROR $err');
+      throw Exception('An error occurred fetching importing the diary');
+    }
+
+  }
+
   showImportFileDialog(BuildContext context, String diaryName, FileSystemEntity f) {
     showDialog(
       context: context, 
@@ -82,14 +120,20 @@ class FileListWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10,),
-              const Text('This will erase all diary entries in this diary.', textAlign: TextAlign.center,)
+              const Text('This will mege the data from the selected file into this diary.', textAlign: TextAlign.center,)
             ],
           ),
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           ElevatedButton(
-              onPressed: () {}, 
+              onPressed: () async { 
+                Diary newDiary = await importDiaryFromFile(f,context);
+                onAfterImport(newDiary);
+                if(context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              }, 
               child: const Text('Yes')
             ),
             ElevatedButton(

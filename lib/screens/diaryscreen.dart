@@ -47,6 +47,17 @@ class _DiaryScreenState extends State<DiaryScreen> {
         diaryEntries = getDiaryEntriesByDate(newDate);
       });
     }
+
+    //After an import the diary needs to be reloaded
+    updateDiaryAfterImport(Diary newDiary) {
+      for ( DiaryEntry de in newDiary!.entries) {
+        activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
+      }
+      setState(() {
+        diaryEntries = getDiaryEntriesByDate(DateTime.now());
+        diaryState = newDiary;
+      });
+    }
     
     @override
     void initState() {
@@ -143,7 +154,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const FileListWidget();
+          return FileListWidget(diary: widget.diary, onAfterImport: updateDiaryAfterImport,);
         },
       );
     }
