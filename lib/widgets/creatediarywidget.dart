@@ -21,7 +21,7 @@ class _CreateDiaryWidgetState extends State<CreateDiaryWidget> {
         Navigator.of(ctx).pop();
       }
     } catch(err) {
-      print('DATABASE ERROR $err');
+      //print('DATABASE ERROR $err');
     }
     
   }

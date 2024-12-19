@@ -133,17 +133,7 @@ class Home extends StatelessWidget {
                 ),
               ],
             )
-            // ElevatedButton(
-            //   onPressed: () => showDiaryListDialog(), 
-            //   child: const Text('Open Diary')
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => showAddDiaryDialog(), 
-            //   child: const Text('Create Diary')
-            // ),
-        
           ]
-          
         ),
       ),
     );

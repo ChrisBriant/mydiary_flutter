@@ -84,19 +84,12 @@ class DiaryListWidget extends StatelessWidget {
                         ),
                       ),
                       dense: true,
-                      // titleTextStyle: const TextStyle(
-                      //   fontWeight: FontWeight.bold,
-                      //   color: Colors.brown, 
-                      //   fontSize: 30.0,
-                      // ),
                     ),
                   ),
                 ),
               ),
             )
-      ), 
-      // confirmAction: () => Navigator.of(context).pop(), 
-      // confirmName: "Close"
+      ),
       cancelName: "Close",
     );
   }

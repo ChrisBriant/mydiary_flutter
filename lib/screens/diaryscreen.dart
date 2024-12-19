@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import '../data/database.dart';
 import '../widgets/adddiaryentrywidget.dart';
 import '../widgets/viewdiaryentrywidget.dart';
@@ -38,7 +37,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
       newDiaryEntries = newDiaryEntries.where((DiaryEntry de) => (de.dateCreated.day == sd.day) && (de.dateCreated.month == sd.month) && (de.dateCreated.year == sd.year)).toList();
       newDiaryEntries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
-      print('NEW DIARY ENTRIES $newDiaryEntries');
       return newDiaryEntries;
     }
 
@@ -73,7 +71,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>?;
 
     void updateDiaryEntries(newEntry, adding) {
       diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);

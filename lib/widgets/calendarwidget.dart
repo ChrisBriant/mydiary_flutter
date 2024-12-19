@@ -114,8 +114,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
         if( (incDate.day == today.day) && (incDate.month == today.month) && (incDate.year == today.year) ) {
           dayState = DayState.current;
-          
-          print("CURRENT CLICK ACTION ${clickAction}");
         } else if(incDate.month == selectedDate.month) {
           dayState = DayState.enabled;
         }
@@ -179,9 +177,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       List<Container> calDays = [];
 
       for(CalendarDay calDay in week) {
-        if(calDay.dayState == DayState.current) {
-          print("ON CURRENT, ${calDay.clickAction}");
-        }
         calDays.add(
           calDay.clickAction != null
           ? Container(
@@ -217,7 +212,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void initState() {
     super.initState();
-    print("I AM INIT STATE");
     if(widget.selectedDate != null) {
       selectedDate = widget.selectedDate!;
     }
@@ -225,11 +219,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("I AM BUILDING ${widget.selectedDate} $selectedDate");
-
-    if(widget.selectedDate != selectedDate && widget.selectedDate != null) {
-      print('Date is not right');
-    }
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,

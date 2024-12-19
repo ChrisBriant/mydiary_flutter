@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class TimeSelectWidget extends StatefulWidget {
@@ -35,17 +33,6 @@ class _TimeSelectWidgetState extends State<TimeSelectWidget> {
         decoration:  BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        // border: Border.all(
-        //   color: Colors.black
-        // )
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.5),
-        //     spreadRadius: 5,
-        //     blurRadius: 7,
-        //     offset: const Offset(0, 3), // changes position of shadow
-        //   ),
-        // ],
       ),
       child: Row(
         children: [

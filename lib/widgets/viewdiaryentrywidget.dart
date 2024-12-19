@@ -33,7 +33,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
         Navigator.of(ctx).pop();
       }
     } catch(err) {
-      print('DATABASE ERROR $err');
+      //print('DATABASE ERROR $err');
     }
     
   }

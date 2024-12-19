@@ -64,7 +64,6 @@ class FileListWidget extends StatelessWidget {
         }
         return savedFiles;
       } catch(err) {
-        print("An error occured $err");
         throw Exception('Unable to retrieve files');
       }
     } else {
@@ -94,7 +93,6 @@ class FileListWidget extends StatelessWidget {
       Diary newDiary = await db.getDiary(diary);
       return newDiary;
     } catch(err) {
-      print('ERROR $err');
       throw Exception('An error occurred fetching importing the diary');
     }
 

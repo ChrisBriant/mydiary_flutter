@@ -12,8 +12,6 @@ class AppDatabase {
   }
 
   Future<void> createDiaryEntry(Database db) async {
-    //await db.execute("ALTER TABLE diaryentry ADD COLUMN dateupdated TEXT;");
-
     await db.execute('''CREATE TABLE IF NOT EXISTS diaryentry(
       id TEXT PRIMARY KEY,
       diaryid TEXT,
@@ -39,8 +37,6 @@ class AppDatabase {
 
   Future<Database> database() async {  
     final dbPath = await sql.getDatabasesPath();
-
-    print('Database path $dbPath');
     
     return await sql.openDatabase(
       path.join(dbPath,'mydiary.db'),
@@ -85,7 +81,6 @@ class AppDatabase {
     final db = await database();
     await createDiaryEntry(db);
 
-    //DateTime currentDt = DateTime.now(); //.subtract(const Duration(days: 1));
     String id = const Uuid().v4();
 
     int rows = await db.insert(
@@ -121,25 +116,8 @@ class AppDatabase {
         LEFT JOIN diaryentry ON diaryentry.diaryid = diary.id;
     """;
 
-    //This is to get the diaryentries by a specifc date (it doesn't work)
-
-    // String sql = """
-    // SELECT diary.id as id, name, diary.datecreated as datecreated, 
-    // diaryentry.id as entryid, entry, diaryentry.datecreated as entrydate 
-    // FROM diary
-    // LEFT JOIN diaryentry ON diaryentry.diaryid = diary.id
-    // WHERE strftime('%Y-%m-%d', diaryentry.datecreated) = ?;
-    // """;
-
-    // String date = "2024-12-08"; // Example date in YYYY-MM-DD format
-
-    // // Execute the query with the date parameter
-    // List<Map<String, dynamic>> data = await db.rawQuery(sql, [date]);
-
 
     List<Map<String, dynamic>> data = await db.rawQuery(sql);
-
-    print('SQL DATA $data');
 
     final List<Diary> uniqueDiaries = []; // Set to ensure uniqueness
     final List<String> diaryIds = []; // For tracking
@@ -170,8 +148,6 @@ class AppDatabase {
       }
     }
 
-    //await Future.delayed(Duration(seconds: 5));
-
     return uniqueDiaries; 
   }
 
@@ -189,10 +165,6 @@ class AppDatabase {
     if(data.isEmpty) {
       throw Exception('Diary not found in database');
     }
-
-    print("Does it fetch the data");
-
-    //Map<String,dynamic> diaryData = data[0];
 
     Diary diaryObj = diary;
     diaryObj.entries = []; // reset entries
@@ -215,8 +187,6 @@ class AppDatabase {
   Future<DiaryEntry> updateDiaryEntry(String entryId, String updatedEntry) async {
     final db = await database();
     final DateTime updateDate =  DateTime.now();
-
-    print("I WANT TO UPDATE $updatedEntry");
 
     int rows = await db.update(
       'diaryentry', 
