@@ -14,6 +14,7 @@ class MyDiary extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My Diary',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.blueGrey,
         scaffoldBackgroundColor: Colors.brown.shade100,
