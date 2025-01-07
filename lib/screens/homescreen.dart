@@ -4,7 +4,7 @@ import '../widgets/diarylistwidget.dart';
 
 class Home extends StatelessWidget {
   static const String routeName = "/homescreen";
-  static const String aboutText = "This is your personal sanctuary for reflection and growth. Create a unique digital diary tailored to your style, where you can freely express yourself through words and images.";
+  static const String aboutText = "This is your personal sanctuary for reflection and growth. Create a unique digital diary tailored to your style, where you can freely express yourself through words.";
 
   const Home({super.key});
 

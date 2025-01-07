@@ -182,7 +182,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           ? Container(
             color: getDayColor(calDay.dayState),
             child: InkWell(
-              onLongPress:  () => calDay.clickAction!(calDay.date),
+              onTap:  () => calDay.clickAction!(calDay.date),
               child: SizedBox(
                 width: 40,
                 height: 20,

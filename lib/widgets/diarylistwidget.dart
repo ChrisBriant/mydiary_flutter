@@ -48,7 +48,7 @@ class DiaryListWidget extends StatelessWidget {
                 //shrinkWrap: true,
                 itemCount: sn.data!.length,
                 itemBuilder: (ctx, idx) => InkWell(
-                  onLongPress: () => Navigator.of(ctx).popAndPushNamed('/diaryscreen',arguments: {
+                  onTap: () => Navigator.of(ctx).popAndPushNamed('/diaryscreen',arguments: {
                     'diary' : sn.data![idx]
                   }),
                   child: Container(

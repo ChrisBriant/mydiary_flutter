@@ -30,7 +30,7 @@ class FileListWidget extends StatelessWidget {
         for (FileSystemEntity f in filteredFileList) {
           savedFiles.add(
             InkWell(
-                onLongPress: () => showImportFileDialog(ctx,Helpers.stripToFileName(f.path),f),
+                onTap: () => showImportFileDialog(ctx,Helpers.stripToFileName(f.path),f),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
                   decoration: BoxDecoration(

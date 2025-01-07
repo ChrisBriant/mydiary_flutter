@@ -363,7 +363,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 : ListView.builder(
                   itemCount: diaryEntries.length,
                   itemBuilder: (ctx, idx) => InkWell(
-                      onLongPress: () => showViewDiaryEntryDialog(diaryEntries[idx]),
+                      onTap: () => showViewDiaryEntryDialog(diaryEntries[idx]),
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
                         decoration: BoxDecoration(
