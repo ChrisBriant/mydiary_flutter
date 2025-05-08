@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Helpers {
     //DATE FUNCTIONS
   /// Get the date weekday
@@ -100,6 +102,13 @@ class Helpers {
     String m = date.month.toString().padLeft(2,'0');
     String y = date.year.toString();
     return "$d/$m/$y";
+  }
+
+  static String getTimeOnlyDisplaySimple(TimeOfDay time) {
+    String h = time.hour.toString().padLeft(2,'0');
+    String min = time.minute.toString().padLeft(2,'0');
+
+    return "$h:$min";
   }
 
   //Take a file path and return only the filename part
