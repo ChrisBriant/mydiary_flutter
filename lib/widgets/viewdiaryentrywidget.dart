@@ -78,6 +78,9 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
         editMode = true;
       }),
       confirmName: editMode ? "Update" : "Edit",
+      cancelAction: editMode ? () => setState(() {
+        editMode = false;
+      }) : () => Navigator.of(context).pop(),
       content:SingleChildScrollView(
         child: SizedBox(
           width: 300,

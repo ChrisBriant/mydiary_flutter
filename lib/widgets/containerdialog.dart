@@ -6,6 +6,7 @@ class ContainerDialog extends StatefulWidget {
   final Function? confirmAction;
   final String? confirmName;
   final String? cancelName;
+  final Function? cancelAction;
 
   const ContainerDialog({
     required this.title,
@@ -13,6 +14,7 @@ class ContainerDialog extends StatefulWidget {
     this.confirmAction,
     this.confirmName,
     this.cancelName,
+    this.cancelAction,
     super.key,
   });
 
@@ -38,7 +40,7 @@ class _ContainerDialogState extends State<ContainerDialog> {
           : const SizedBox()  
         ,
         ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(), 
+          onPressed: widget.cancelAction != null ? () => widget.cancelAction!() : () => Navigator.of(context).pop(), 
           child: Text(widget.cancelName != null ? widget.cancelName! : "Cancel")
         ),
 
