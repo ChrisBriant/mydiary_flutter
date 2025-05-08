@@ -72,21 +72,47 @@ class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
 
+    // void updateDiaryEntries(newEntry, adding) {
+    //   print("CALLING UPDATE DIARY ENTRIES");
+    //   diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
+    //   diaryState!.entries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
+
+    //   setState(() {
+    //     diaryEntries.add(newEntry);
+    //     diaryEntries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+    //     //Update the diary object
+    //     List<DiaryEntry> newAndExistingEntries =  [...diaryState!.entries,newEntry];
+        
+    //     diaryState!.entries = newAndExistingEntries;
+    //     //For updating the calendar
+    //     for ( DiaryEntry de in diaryState!.entries) {
+    //       activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
+    //     }
+    //   });
+      
+    // }
+
     void updateDiaryEntries(newEntry, adding) {
+      print("CALLING UPDATE DIARY ENTRIES");
+
+      // Remove the old entry from both lists if it exists
       diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
       diaryState!.entries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
 
       setState(() {
-        diaryEntries.add(newEntry);
-        diaryEntries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
-        //Update the diary object
-        List<DiaryEntry> newAndExistingEntries =  [...diaryState!.entries,newEntry];
-        
-        diaryState!.entries = newAndExistingEntries;
-        //For updating the calendar
+        // Add the new entry to the diary's master list
+        diaryState!.entries.add(newEntry);
+        // Sort the master list (good practice to keep it consistent)
+        diaryState!.entries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+
+        // Update the active diary days for the calendar
+        activeDiaryDays.clear(); // Clear the existing map to rebuild it
         for ( DiaryEntry de in diaryState!.entries) {
           activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
         }
+
+        // Re-filter the diaryEntries list based on the currently selected date
+        diaryEntries = getDiaryEntriesByDate(selectedDate);
       });
     }
 

@@ -29,14 +29,24 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
   updateDiary(BuildContext ctx, String entryId, String newEntry) async {
     AppDatabase db = AppDatabase();
 
+    print("SELECTED DATE IS $selectedDate : SELECTED TIME IS $selectedTime");
+    DateTime newSelectedDate = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute
+    );
+    print("SELECTED DATE TO CHANGE IS NOW $newSelectedDate");
+
     try{
-      DiaryEntry newDiaryEntry = await db.updateDiaryEntry(entryId,newEntry);
+      DiaryEntry newDiaryEntry = await db.updateDiaryEntryAndDate(entryId,newEntry,newSelectedDate);
       widget.updateEntries(newDiaryEntry, false);
       if(ctx.mounted) {
         Navigator.of(ctx).pop();
       }
     } catch(err) {
-      //print('DATABASE ERROR $err');
+      print('DATABASE ERROR $err');
     }
     
   }

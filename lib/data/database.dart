@@ -217,6 +217,40 @@ class AppDatabase {
 
   }
 
+  Future<DiaryEntry> updateDiaryEntryAndDate(String entryId, String updatedEntry, DateTime updatedDateTime) async {
+    final db = await database();
+    final DateTime updateDate =  DateTime.now();
+
+    int rows = await db.update(
+      'diaryentry', 
+      {
+        'entry' : updatedEntry,
+        'datecreated' : updatedDateTime.toIso8601String(),
+        'dateupdated' : updateDate.toIso8601String()
+      },
+      where: 'id = ?',
+      whereArgs: [entryId]
+    );
+
+    if(rows > 0) {
+      //Get the entry object
+      List<Map<String,dynamic>> diaryEntry = await db.rawQuery('SELECT * FROM diaryentry WHERE id="$entryId";');
+      if(diaryEntry.isEmpty) {
+        throw Exception('Unable to locate updated entry');
+      }
+      
+
+      return DiaryEntry(
+        id: entryId, 
+        entry: updatedEntry, 
+        dateCreated: DateTime.parse(diaryEntry[0]['datecreated'])
+      );
+    } else {
+      throw Exception('Failed to updated diary.');
+    }
+
+  }
+
   Future<Diary> deleteDiaryEntry(String entryId, Diary diary) async {
     final db = await database();
 
