@@ -38,6 +38,12 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
       selectedTime.minute
     );
     print("SELECTED DATE TO CHANGE IS NOW $newSelectedDate");
+    if(newSelectedDate.isAfter(DateTime.now())) {
+      if(ctx.mounted) {
+        ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("Date and time must be before current date and time.")));
+      }
+      return;
+    }
 
     try{
       DiaryEntry newDiaryEntry = await db.updateDiaryEntryAndDate(entryId,newEntry,newSelectedDate);
@@ -111,7 +117,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
                         DateTime? newDate = await showDatePicker(
                           context: context,
                                 firstDate: DateTime.now().subtract(const Duration(days:90)), 
-                                lastDate: DateTime.now().add(const Duration(days:90)),
+                                lastDate: DateTime.now(),
                                 initialDate: widget.diaryEntry.dateCreated,
                           );
                         if(newDate != null) {
@@ -122,7 +128,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
  
                       }
                       ,
-                      icon: Icon(Icons.edit)
+                      icon: const Icon(Icons.edit)
                     ),
                     Text(
                       Helpers.getTimeOnlyDisplaySimple(selectedTime),
