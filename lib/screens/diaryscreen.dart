@@ -72,28 +72,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
 
-    // void updateDiaryEntries(newEntry, adding) {
-    //   print("CALLING UPDATE DIARY ENTRIES");
-    //   diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
-    //   diaryState!.entries.removeWhere((DiaryEntry d) => d.id == newEntry.id);
-
-    //   setState(() {
-    //     diaryEntries.add(newEntry);
-    //     diaryEntries.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
-    //     //Update the diary object
-    //     List<DiaryEntry> newAndExistingEntries =  [...diaryState!.entries,newEntry];
-        
-    //     diaryState!.entries = newAndExistingEntries;
-    //     //For updating the calendar
-    //     for ( DiaryEntry de in diaryState!.entries) {
-    //       activeDiaryDays[DateTime(de.dateCreated.year,de.dateCreated.month,de.dateCreated.day)] = setCurrentDate;
-    //     }
-    //   });
-      
-    // }
-
     void updateDiaryEntries(newEntry, adding) {
-      print("CALLING UPDATE DIARY ENTRIES");
 
       // Remove the old entry from both lists if it exists
       diaryEntries.removeWhere((DiaryEntry d) => d.id == newEntry.id);

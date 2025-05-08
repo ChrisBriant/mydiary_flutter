@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mydiary/widgets/timeselectwidget.dart';
 import './containerdialog.dart';
 import '../data/database.dart';
 import '../helpers/helpers.dart';
@@ -29,7 +28,6 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
   updateDiary(BuildContext ctx, String entryId, String newEntry) async {
     AppDatabase db = AppDatabase();
 
-    print("SELECTED DATE IS $selectedDate : SELECTED TIME IS $selectedTime");
     DateTime newSelectedDate = DateTime(
       selectedDate.year,
       selectedDate.month,
@@ -37,7 +35,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
       selectedTime.hour,
       selectedTime.minute
     );
-    print("SELECTED DATE TO CHANGE IS NOW $newSelectedDate");
+
     if(newSelectedDate.isAfter(DateTime.now())) {
       if(ctx.mounted) {
         ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("Date and time must be before current date and time.")));
@@ -52,7 +50,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
         Navigator.of(ctx).pop();
       }
     } catch(err) {
-      print('DATABASE ERROR $err');
+      //print('DATABASE ERROR $err');
     }
     
   }
@@ -78,6 +76,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
         editMode = true;
       }),
       confirmName: editMode ? "Update" : "Edit",
+      cancelName: editMode ? "Cancel" : "Close",
       cancelAction: editMode ? () => setState(() {
         editMode = false;
       }) : () => Navigator.of(context).pop(),
@@ -98,24 +97,6 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
                       ),
                     ),
                     IconButton(
-                      // onPressed: () => showDialog(
-                      //   context: context,
-                      //   builder: (ctx) => AlertDialog(
-                      //     //title: const Text("Edit Date and Time"),
-                      //     content: Column(
-                      //       children: [
-                      //         DatePickerDialog(
-                      //           firstDate: DateTime.now().subtract(const Duration(days:90)), 
-                      //           lastDate: DateTime.now().add(const Duration(days:90)),
-                      //           initialDate: widget.diaryEntry.dateCreated,
-                      //           onDatePickerModeChange: (value) => print(value),  
-                                
-                      //         ),
-                      //         TimeSelectWidget(hour: 0, minute: 0, onUpdate: ()=> print('Hello'))
-                      //       ],
-                      //     ),
-                      //   )
-                      // ),
                       onPressed: () async { 
                         DateTime? newDate = await showDatePicker(
                           context: context,
@@ -154,7 +135,7 @@ class _ViewDiaryEntryWidgetState extends State<ViewDiaryEntryWidget> {
  
                       }
                       ,
-                      icon: Icon(Icons.edit)
+                      icon: const Icon(Icons.edit)
                     ),
                 ],
               )
